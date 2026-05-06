@@ -36,9 +36,141 @@ function canWrite(rol: Role, module: string): boolean {
 }
 
 // ============================================================
+// PUBLIC LANDING PAGE
+// ============================================================
+function PublicLandingPage({ onLoginClick }: { onLoginClick: () => void }) {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', newsletter: false })
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setFormStatus('sending')
+    await new Promise(resolve => setTimeout(resolve, 900))
+    setFormStatus('sent')
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(160deg, #0b1e3d 0%, #1e4d8c 45%, #0d2847 100%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
+
+      {/* Header */}
+      <header style={{ position: 'sticky', top: 0, zIndex: 40, backdropFilter: 'blur(12px)', background: 'rgba(11,30,61,0.6)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '8px 20px', border: '2px solid rgba(255,255,255,0.5)', borderRadius: '999px' }}>
+            <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ffffff' }} />
+            <span style={{ fontFamily: 'Caveat, cursive', fontWeight: 600, fontSize: '26px', color: '#ffffff', lineHeight: 1 }}>Lavb.us</span>
+          </div>
+          <button
+            onClick={onLoginClick}
+            style={{ padding: '8px 20px', border: '1px solid rgba(255,255,255,0.35)', borderRadius: '999px', color: 'rgba(255,255,255,0.85)', fontSize: '13px', background: 'transparent', cursor: 'pointer', transition: 'background 0.2s' }}
+            onMouseOver={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
+            onMouseOut={e => (e.currentTarget.style.background = 'transparent')}
+          >
+            Login
+          </button>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section style={{ maxWidth: '900px', margin: '0 auto', padding: '96px 24px 64px', textAlign: 'center' }}>
+        <p style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#6ba3e8', marginBottom: '20px' }}>Construction Management · Florida</p>
+        <h1 style={{ fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 300, color: '#ffffff', lineHeight: 1.2, margin: '0 0 16px' }}>
+          We Built House.<br />
+          <span style={{ color: '#6ba3e8', fontWeight: 600 }}>You make Homes...</span>
+        </h1>
+      </section>
+
+      {/* Logo variants */}
+      <section style={{ maxWidth: '900px', margin: '0 auto', padding: '0 24px 80px', display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        {/* White bg */}
+        <div style={{ background: '#ffffff', borderRadius: '16px', padding: '28px 44px', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1e4d8c' }} />
+          <span style={{ fontFamily: 'Caveat, cursive', fontWeight: 600, fontSize: '36px', color: '#1e4d8c', lineHeight: 1 }}>Lavb.us</span>
+        </div>
+        {/* Blue bg */}
+        <div style={{ background: '#1e4d8c', borderRadius: '16px', padding: '28px 44px', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.25)', border: '2px solid rgba(255,255,255,0.2)' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffffff' }} />
+          <span style={{ fontFamily: 'Caveat, cursive', fontWeight: 600, fontSize: '36px', color: '#ffffff', lineHeight: 1 }}>Lavb.us</span>
+        </div>
+        {/* Dark bg */}
+        <div style={{ background: '#1f2937', borderRadius: '16px', padding: '28px 44px', display: 'inline-flex', alignItems: 'center', gap: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
+          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#6ba3e8' }} />
+          <span style={{ fontFamily: 'Caveat, cursive', fontWeight: 600, fontSize: '36px', color: '#6ba3e8', lineHeight: 1 }}>Lavb.us</span>
+        </div>
+      </section>
+
+      {/* Contact form */}
+      <section style={{ maxWidth: '600px', margin: '0 auto', padding: '0 24px 96px' }}>
+        <h2 style={{ fontSize: '28px', fontWeight: 300, color: '#ffffff', textAlign: 'center', marginBottom: '40px' }}>Get in touch</h2>
+
+        {formStatus === 'sent' ? (
+          <div style={{ textAlign: 'center', padding: '60px 24px', border: '1px solid rgba(107,163,232,0.3)', borderRadius: '12px', background: 'rgba(107,163,232,0.06)' }}>
+            <p style={{ color: '#6ba3e8', fontSize: '16px', marginBottom: '8px' }}>Thanks for reaching out!</p>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>We'll be in touch shortly.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <label style={{ display: 'block', color: 'rgba(255,255,255,0.55)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '8px' }}>Name</label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                required
+                style={{ width: '100%', boxSizing: 'border-box', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '6px', padding: '12px 16px', color: '#ffffff', fontSize: '14px', outline: 'none' }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', color: 'rgba(255,255,255,0.55)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '8px' }}>Email</label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                required
+                style={{ width: '100%', boxSizing: 'border-box', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '6px', padding: '12px 16px', color: '#ffffff', fontSize: '14px', outline: 'none' }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', color: 'rgba(255,255,255,0.55)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: '8px' }}>Message</label>
+              <textarea
+                value={formData.message}
+                onChange={e => setFormData({ ...formData, message: e.target.value })}
+                required
+                rows={5}
+                style={{ width: '100%', boxSizing: 'border-box', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '6px', padding: '12px 16px', color: '#ffffff', fontSize: '14px', outline: 'none', resize: 'vertical' }}
+              />
+            </div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={formData.newsletter}
+                onChange={e => setFormData({ ...formData, newsletter: e.target.checked })}
+                style={{ accentColor: '#1e4d8c', width: '16px', height: '16px', cursor: 'pointer' }}
+              />
+              <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '13px' }}>Subscribe to our newsletter</span>
+            </label>
+            <button
+              type="submit"
+              disabled={formStatus === 'sending'}
+              style={{ padding: '14px', background: '#1e4d8c', color: '#ffffff', border: 'none', borderRadius: '6px', fontSize: '14px', cursor: 'pointer', transition: 'background 0.2s', opacity: formStatus === 'sending' ? 0.7 : 1 }}
+            >
+              {formStatus === 'sending' ? 'Sending...' : 'Send Message'}
+            </button>
+          </form>
+        )}
+      </section>
+
+      {/* Footer */}
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.08)', padding: '28px 24px', textAlign: 'center', color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>
+        © 2026 Lavb.us · LAVB Corp · Construction Management · Florida
+      </footer>
+    </div>
+  )
+}
+
+// ============================================================
 // LOGIN SCREEN
 // ============================================================
-function LoginScreen({ onLogin }: { onLogin: () => void }) {
+function LoginScreen({ onBack }: { onBack: () => void }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -57,7 +189,6 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
         setError('Revisa tu email para confirmar tu cuenta.')
         setLoading(false); return
       }
-      onLogin()
     } catch (e: any) {
       setError(e.message || 'Error de autenticación')
     } finally { setLoading(false) }
@@ -66,6 +197,9 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   return (
     <div className="min-h-screen bg-stone-950 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
+        <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'rgba(255,255,255,0.4)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer', marginBottom: '32px' }}>
+          ← Back
+        </button>
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-4 px-8 py-4 border-2 border-[#1e4d8c] rounded-full mb-6">
             <div className="w-3 h-3 rounded-full bg-[#1e4d8c]" />
@@ -113,9 +247,8 @@ export default function App() {
   const [session, setSession] = useState<any>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [showLogin, setShowLogin] = useState(false)
   const [activeModule, setActiveModule] = useState('overview')
-  const [showModal, setShowModal] = useState<string | null>(null)
-  const [modalData, setModalData] = useState<any>({})
   const [selectedProperty, setSelectedProperty] = useState<string | null>(null)
 
   // Data state
@@ -139,7 +272,7 @@ export default function App() {
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
-      if (session) loadProfile(session.user.id)
+      if (session) { setShowLogin(false); loadProfile(session.user.id) }
       else { setProfile(null); setLoading(false) }
     })
     return () => subscription.unsubscribe()
@@ -178,9 +311,24 @@ export default function App() {
 
   const handleLogout = async () => { await supabase.auth.signOut(); setSession(null); setProfile(null) }
 
-  if (loading) return <div className="min-h-screen bg-stone-950 flex items-center justify-center"><div className="text-stone-500 italic">Cargando...</div></div>
-  if (!session) return <LoginScreen onLogin={() => {}} />
-  if (!profile) return <div className="min-h-screen bg-stone-950 flex items-center justify-center"><div className="text-stone-500">Cargando perfil...</div></div>
+  if (loading) return (
+    <div className="min-h-screen bg-stone-950 flex items-center justify-center">
+      <div className="text-stone-500 italic">Cargando...</div>
+    </div>
+  )
+
+  // No session: public landing or login
+  if (!session) {
+    if (showLogin) return <LoginScreen onBack={() => setShowLogin(false)} />
+    return <PublicLandingPage onLoginClick={() => setShowLogin(true)} />
+  }
+
+  // Session but profile still loading
+  if (!profile) return (
+    <div className="min-h-screen bg-stone-950 flex items-center justify-center">
+      <div className="text-stone-500">Cargando perfil...</div>
+    </div>
+  )
 
   const rol = profile.rol
   const groundUp = credits.filter(c => c.tipo === 'ground_up')
